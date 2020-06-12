@@ -9,9 +9,9 @@ CREATE USER 'guest'@'%' IDENTIFIED BY '100000';
 
 
 GRANT ALL PRIVILEGES ON QnADB.* TO 'admin'@'localhost';
-CREATE VIEW QnADB.user_wp AS SELECT name, password, avatar FROM QnADB.users;
+CREATE VIEW QnADB.user_wp AS SELECT uid, name, password, avatar FROM QnADB.users;
 GRANT SELECT ON QnADB.users TO 'user';
-GRANT UPDATE ON QnADB.user_wp TO 'user';
+GRANT UPDATE, SELECT ON QnADB.user_wp TO 'user';
 GRANT SELECT, INSERT, UPDATE, DELETE ON QnADB.question TO 'user';
 GRANT SELECT, INSERT, UPDATE, DELETE ON QnADB.answer TO 'user';
 GRANT INSERT, SELECT ON QnADB.users TO 'guest';

@@ -1,0 +1,56 @@
+<?php session_start(); ?>
+
+<html>
+<body>
+
+<head>
+<meta charset="UTF-8">
+<title>个人主页</title>
+</head>
+
+<?php
+if (!isset($_SESSION["user"]) or is_null($_SESSION["user"])) {
+	echo "<h1>尚未登录！</h1>";
+	exit();
+}
+echo "<h1>" . $_SESSION["user"]["name"] . "的个人主页</h1>";
+$conn = new mysqli("localhost", "user", "VEk8qg", "QnADB");
+if($conn->connect_error) {
+	die("连接失败:" . mysqli_connect_error());
+}
+$conn->set_charset("utf8");
+$sql = "SELECT qid, content FROM question WHERE uid = ? ORDER BY uploadtime DESC";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION["user"]["uid"]);
+$stmt->execute();
+$stmt->bind_result($qid, $content);
+echo "<h2>我的提问</h2>";
+while($stmt->fetch()) {
+	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content) . "</a><br>";
+}
+$stmt->close();
+
+$sql = "SELECT qid, content FROM question WHERE qid IN (SELECT qid FROM answer WHERE uid = ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION["user"]["uid"]);
+$stmt->execute();
+$stmt->bind_result($qid, $content);
+echo "<h2>我的回答</h2>";
+while($stmt->fetch()) {
+	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content) . "</a><br>";
+}
+$stmt->close();
+
+$conn->close();
+?>
+
+<h2>修改密码</h2>
+<form action="change_password.php" method="post">
+旧密码：<input type="password" name="old_pwd"><br>
+新密码：<input type="password" name="new_pwd"><br>
+确认新密码：<input type="password" name="re_pwd"><br>
+<input type="submit" value="提交"><br>
+</form>
+
+</body>
+</html>

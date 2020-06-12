@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$conn->close();
 			die;
 		}
-
+		$stmt->close();
 		$sql = "INSERT INTO users(uid, name, password, privilege) VALUES (?, ?, ?, 'guest')";
 		$stmt = $conn->prepare($sql);
 		$stmt->bind_param("iss", intval($_POST["uid"]), $_POST["name"], $hashed_password);
