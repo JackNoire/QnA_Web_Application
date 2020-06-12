@@ -44,7 +44,7 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
     // 输出数据
     while($row = mysqli_fetch_assoc($result)) {
-    	echo "<a href='show_question.php?qid=" . $row["qid"] . "'>" . $row["content"] . "</a><br>";
+    	echo "<a href='show_question.php?qid=" . $row["qid"] . "'>" . htmlspecialchars($row["content"]) . "</a><br>";
     }
 } else {
     echo "0 结果";
