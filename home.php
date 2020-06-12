@@ -52,5 +52,37 @@ $conn->close();
 <input type="submit" value="提交"><br>
 </form>
 
+<h2>修改头像</h2>
+<form action="change_avatar.php" method="post">
+原头像：<?php echo is_null($_SESSION["user"]["avatar"])?"null<br>":("<img src='" . $_SESSION["user"]["avatar"] . "' 
+						height='200', width='200'"); ?><br>
+新头像url：<input type="text" name="avatar" size="50"><br>
+<input type="submit" value="提交"><br>
+</form>
+
+<?php
+
+$conn = new mysqli("localhost", "user", "VEk8qg", "QnADB");
+if($conn->connect_error) {
+	die("连接失败:" . mysqli_connect_error());
+}
+$conn->set_charset("utf8");
+$sql = "SELECT privilege FROM users WHERE uid = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION["user"]["uid"]);
+$stmt->execute();
+$stmt->bind_result($privilege);
+if($stmt->fetch() && $privilege==="user") {
+	?>
+	<h2>提问</h2>
+	<form action="add_question.php" method="post">
+	<textarea rows="5" cols="80" name="question"></textarea><br>
+	<input type="submit" value="提交"><br>
+	</form>
+	<?php
+}
+
+?>
+
 </body>
 </html>
