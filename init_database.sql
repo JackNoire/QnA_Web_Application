@@ -3,9 +3,9 @@ CREATE DATABASE IF NOT EXISTS QnADB;
 
 USE QnADB;
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS question;
 DROP TABLE IF EXISTS answer;
+DROP TABLE IF EXISTS question;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
 	uid NUMERIC(13) NOT NULL PRIMARY KEY,
@@ -13,7 +13,7 @@ CREATE TABLE users (
 	password CHAR(32) NOT NULL,
 	privilege VARCHAR(5)
 	CHECK (privilge IN ('admin', 'user', 'guest')),
-	avatar BLOB
+	avatar VARCHAR(200)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE question (
