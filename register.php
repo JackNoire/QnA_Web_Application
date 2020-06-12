@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		if($conn->connect_error) {
 			die("连接失败:" . mysqli_connect_error());
 		}
+		$conn->set_charset('utf8');
 		$sql = "SELECT uid FROM users WHERE uid = ?";
 		$stmt = $conn->prepare($sql);
 		$stmt->bind_param("s", $_POST[uid]);
@@ -64,10 +65,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				$conn->close();
 				die;
 			}
+		} else {
+			echo "<font color='#FF0000'> *检查用户ID时发生错误 </font><br>";
+			$stmt->free_result();
+			$stmt->close();
+			$conn->close();
+			die;
 		}
 
 		$sql = "INSERT INTO users(uid, name, password, privilege) VALUES (?, ?, ?, 'guest')";
-		$action = $conn->prepare($sql);
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("iss", intval($_POST["uid"]), $_POST["name"], $hashed_password);
+		if($stmt->execute()) {
+			echo "成功创建用户，用户ID " . $_POST["uid"] . "<br>";
+			echo "<a href='index.php'>" . "返回首页" . "</a><br>";
+			$stmt->close();
+			$conn->close();
+		} else {
+    		echo "<font color='#FF0000'> *注册用户时发生错误 </font><br>";
+			$stmt->close();
+			$conn->close();
+    		die;
+		}
 
 	}
 }
