@@ -48,12 +48,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		$noError = false;
 	}
 	if($noError) {
-		$conn = mysqli_connect("localhost", "guest", "100000");
-		if(!$conn) {
+		$conn = new mysqli("localhost", "guest", "100000", "QnADB");
+		if($conn->connect_error) {
 			die("连接失败:" . mysqli_connect_error());
 		}
-		mysqli_query($conn, "set names 'utf8'");
-		$stmt = $conn->prepare()
+		$sql = "SELECT uid FROM users WHERE uid = ?";
+		$stmt = $conn->prepare($sql);
+		$stmt->bind_param("s", $_POST[uid]);
+		if($stmt->execute()) {
+			$stmt->store_result();
+			if($stmt->num_rows() > 0) {
+				echo "<font color='#FF0000'> *用户ID已存在 </font><br>";
+				$stmt->free_result();
+				$stmt->close();
+				$conn->close();
+				die;
+			}
+		}
+
+		$sql = "INSERT INTO users(uid, name, password, privilege) VALUES (?, ?, ?, 'guest')";
+		$action = $conn->prepare($sql);
+
 	}
 }
 ?>
