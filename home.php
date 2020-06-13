@@ -13,7 +13,7 @@ if (!isset($_SESSION["user"]) or is_null($_SESSION["user"])) {
 	echo "<h1>尚未登录！</h1>";
 	exit();
 }
-echo "<h1>" . $_SESSION["user"]["name"] . "的个人主页</h1>";
+echo "<h1>" . htmlspecialchars($_SESSION["user"]["name"], ENT_QUOTES) . "的个人主页</h1>";
 $conn = new mysqli("localhost", "user", "VEk8qg", "QnADB");
 if($conn->connect_error) {
 	die("连接失败:" . mysqli_connect_error());
@@ -26,7 +26,7 @@ $stmt->execute();
 $stmt->bind_result($qid, $content);
 echo "<h2>我的提问</h2>";
 while($stmt->fetch()) {
-	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content) . "</a><br>";
+	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content, ENT_QUOTES) . "</a><br>";
 }
 $stmt->close();
 
@@ -37,7 +37,7 @@ $stmt->execute();
 $stmt->bind_result($qid, $content);
 echo "<h2>我的回答</h2>";
 while($stmt->fetch()) {
-	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content) . "</a><br>";
+	echo "<a href='show_question.php?qid=" . $qid . "'>" . htmlspecialchars($content, ENT_QUOTES) . "</a><br>";
 }
 $stmt->close();
 

@@ -24,7 +24,7 @@ if(is_null($_SESSION["user"])) {
 <?php
 } else {
 ?>
-<h4>Welcome, <?php echo $_SESSION["user"]["name"]; ?></h4>
+<h4>Welcome, <?php echo htmlspecialchars($_SESSION["user"]["name"], ENT_QUOTES); ?></h4>
 <form action="home.php" method="post">
 <input type="submit" value="个人主页">
 </form>
