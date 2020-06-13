@@ -1,7 +1,7 @@
 <?php
 session_start();
 $avatar_url = $_POST["avatar"];
-if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$avatar_url)) {
+if (!filter_var($avatar_url, FILTER_VALIDATE_URL)) {
 	echo "非法的url地址";
 	die;
 } elseif (strlen($avatar_url) > 200) {
