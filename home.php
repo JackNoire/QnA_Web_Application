@@ -84,5 +84,17 @@ if($stmt->fetch() && $privilege==="user") {
 
 ?>
 
+<form method="post">
+<input type="submit" value="退出登录" name="quit"><br>
+</form>
+<?php
+if(isset($_POST["quit"])) {
+	session_destroy();
+	unset($_POST["quit"]);
+	echo "已退出登录！";
+	echo "<a href='index.php'>" . "返回首页" . "</a><br>";
+}
+?>
+
 </body>
 </html>
