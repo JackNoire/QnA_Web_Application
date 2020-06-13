@@ -1,6 +1,10 @@
 <?php
 
 session_start();
+if(empty($_POST["new_pwd"])) {
+	echo "新密码不能为空！";
+	die;
+}
 $hashed_old = md5($_POST["old_pwd"]);
 $hashed_new = md5($_POST["new_pwd"]);
 $hashed_re = md5($_POST["re_pwd"]);
